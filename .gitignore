@@ -1,0 +1,4 @@
+/output/
+/bin/
+/target/
+.scala_dependencies
