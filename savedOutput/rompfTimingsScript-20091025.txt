@@ -1,0 +1,171 @@
+Executed on a dual quad-core Xeon E5462 2.80GHz on Fedora 11 with Scala 2.8.0.r19261, commit 59521431f5c118b73e35b0b396e3efd6aecec3dd for this project and the following JVM:
+
+java version "1.6.0_18-ea"
+Java(TM) SE Runtime Environment (build 1.6.0_18-ea-b03)
+Java HotSpot(TM) 64-Bit Server VM (build 16.0-b10, mixed mode)
+
+============
+JVM settings: -Xms1G -Xmx1G -XX:+UseCompressedOops -XX:+DoEscapeAnalysis -XX:+UseParallelGC -XX:+UseParallelOldGC
+
+[N=1000000] x 250                  std scalac          -optimise
+rompf.BenchARawArrayIndexed	          155                 153
+rompf.BenchARawArrayForeach           140                 150
+rompf.BenchARawArrayForeachMega	     1736                1734
+rompf.BenchARawArrayIte	  	          945                 856
+rompf.BenchAArrayIndexed              121                 131
+rompf.BenchAArrayIter                 264                 258
+rompf.BenchAListIter                 1918                1983
+rompf.BenchAListForeach              1924                1957
+rompf.BenchAListHeadTail             1891                1922
+rompf.BenchAVectorForeach             334                 470
+rompf.BenchAVectorForeachFastProtect  498                 437
+rompf.BenchAVectorHeadTail           4419                4548
+rompf.BenchAVectorHeadTailAlt        5373                5484
+rompf.BenchAVectorHeadTailBlt        2950                2936
+rompf.BenchAVectorHeadTailClt        5529                5463
+rompf.BenchAVectorHeadTailStub       2132                2145
+rompf.BenchAVectorIndexed            2698                2758
+rompf.BenchAVectorIndexedFast        2564                2582
+rompf.BenchAVectorIter                773                 836
+
+[N=1024,N2=1024] x 250             std scalac          -optimise
+rompf.BenchBListForeach              1738                1738
+rompf.BenchBListHeadTail             1443                1447
+rompf.BenchBListIter                 1550                1482
+rompf.BenchBVectorForeach            6599                6583
+rompf.BenchBVectorForeachFast        6251                 675
+rompf.BenchBVectorForeachFastProtect 6675                 706
+rompf.BenchBVectorIndexedFast        6038                6021
+rompf.BenchBVectorIter               3376                2213
+
+[N=1000000] x 250                  std scalac          -optimise
+rompf.BenchCArrayIter                1356                1352
+rompf.BenchCListHeadTail             4410                4471
+rompf.BenchCVectorForeach            1891                1896
+rompf.BenchCVectorHeadTail           1876                1900
+rompf.BenchCVectorIter               1905                1890
+============
+
+============
+JVM settings: -Xms1G -Xmx1G -XX:+UseParallelGC -XX:+UseParallelOldGC
+
+[N=1000000] x 250
+rompf.BenchARawArrayIndexed           481
+rompf.BenchARawArrayForeach           481
+rompf.BenchARawArrayForeachMega      1743
+rompf.BenchARawArrayIte               763
+rompf.BenchAArrayIndexed              482
+rompf.BenchAArrayIter                 548
+rompf.BenchAListIter                 2637
+rompf.BenchAListForeach              2584
+rompf.BenchAListHeadTail             2601
+rompf.BenchAVectorForeach            1083
+rompf.BenchAVectorForeachFastProtect 1168
+rompf.BenchAVectorHeadTail           4790
+rompf.BenchAVectorHeadTailAlt        8979
+rompf.BenchAVectorHeadTailBlt        3895
+rompf.BenchAVectorHeadTailClt        9080
+rompf.BenchAVectorHeadTailStub       2189
+rompf.BenchAVectorIndexed            3126
+rompf.BenchAVectorIndexedFast        2874
+rompf.BenchAVectorIter               1450
+
+[N=1024,N2=1024] x 250
+rompf.BenchBListForeach              3436
+rompf.BenchBListHeadTail             1491
+rompf.BenchBListIter                 2084
+rompf.BenchBVectorForeach            7661
+rompf.BenchBVectorForeachFast        8418
+rompf.BenchBVectorForeachFastProtect 8545
+rompf.BenchBVectorIndexedFast        5355
+rompf.BenchBVectorIter               2868
+
+[N=1000000] x 250
+rompf.BenchCArrayIter                2036
+rompf.BenchCListHeadTail             6479
+rompf.BenchCVectorForeach            2415
+rompf.BenchCVectorHeadTail           2434
+rompf.BenchCVectorIter               2453
+============
+
+============
+JVM settings: -Xms1G -Xmx1G -XX:+UseCompressedOops -XX:+UseParallelGC -XX:+UseParallelOldGC
+
+[N=1000000] x 250
+rompf.BenchARawArrayIndexed           142
+rompf.BenchARawArrayForeach           216
+rompf.BenchARawArrayForeachMega      1734
+rompf.BenchARawArrayIte               955
+rompf.BenchAArrayIndexed              128
+rompf.BenchAArrayIter                 277
+rompf.BenchAListIter                 1899
+rompf.BenchAListForeach              1954
+rompf.BenchAListHeadTail             1887
+rompf.BenchAVectorForeach             388
+rompf.BenchAVectorForeachFastProtect  462
+rompf.BenchAVectorHeadTail           4428
+rompf.BenchAVectorHeadTailAlt        5422
+rompf.BenchAVectorHeadTailBlt        2904
+rompf.BenchAVectorHeadTailClt        5539
+rompf.BenchAVectorHeadTailStub       2129
+rompf.BenchAVectorIndexed            2806
+rompf.BenchAVectorIndexedFast        2538
+rompf.BenchAVectorIter                877
+
+[N=1024,N2=1024] x 250
+rompf.BenchBListForeach              1746
+rompf.BenchBListHeadTail             1444
+rompf.BenchBListIter                 1829
+rompf.BenchBVectorForeach            6580
+rompf.BenchBVectorForeachFast        6247
+rompf.BenchBVectorForeachFastProtect 6724
+rompf.BenchBVectorIndexedFast        6053
+rompf.BenchBVectorIter               2562
+
+[N=1000000] x 250
+rompf.BenchCArrayIter                1607
+rompf.BenchCListHeadTail             4641
+rompf.BenchCVectorForeach            1873
+rompf.BenchCVectorHeadTail           1910
+rompf.BenchCVectorIter               1889
+============
+
+JVM settings: -Xms1G -Xmx1G -XX:+DoEscapeAnalysis -XX:+UseParallelGC -XX:+UseParallelOldGC
+
+[N=1000000] x 250
+rompf.BenchARawArrayIndexed           511
+rompf.BenchARawArrayForeach           457
+rompf.BenchARawArrayForeachMega      1727
+rompf.BenchARawArrayIte               757
+rompf.BenchAArrayIndexed              489
+rompf.BenchAArrayIter                 524
+rompf.BenchAListIter                 2525
+rompf.BenchAListForeach              2530
+rompf.BenchAListHeadTail             2545
+rompf.BenchAVectorForeach            1043
+rompf.BenchAVectorForeachFastProtect 1049
+rompf.BenchAVectorHeadTail           4827
+rompf.BenchAVectorHeadTailAlt        9027
+rompf.BenchAVectorHeadTailBlt        4056
+rompf.BenchAVectorHeadTailClt        9130
+rompf.BenchAVectorHeadTailStub       2142
+rompf.BenchAVectorIndexed            3105
+rompf.BenchAVectorIndexedFast        2770
+rompf.BenchAVectorIter               1444
+
+[N=1024,N2=1024] x 250
+rompf.BenchBListForeach              1975
+rompf.BenchBListHeadTail             1532
+rompf.BenchBListIter                 1953
+rompf.BenchBVectorForeach            7549
+rompf.BenchBVectorForeachFast        8455
+rompf.BenchBVectorForeachFastProtect 8431
+rompf.BenchBVectorIndexedFast        5367
+rompf.BenchBVectorIter               2234
+
+[N=1000000] x 250
+rompf.BenchCArrayIter                1758
+rompf.BenchCListHeadTail             6172
+rompf.BenchCVectorForeach            2366
+rompf.BenchCVectorHeadTail           2395
+rompf.BenchCVectorIter               2341
