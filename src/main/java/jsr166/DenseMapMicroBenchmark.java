@@ -3,6 +3,7 @@
  * Expert Group and released to the public domain, as explained at
  * http://creativecommons.org/licenses/publicdomain
  */
+
 package jsr166;
 
 import java.util.*;
@@ -112,35 +113,34 @@ public class DenseMapMicroBenchmark {
             this.mapClass = mapClass;
         }
         public void work() {
-            scala.collection.mutable.Map m = null;
+            Map m = null;
             try {
-                m = (scala.collection.mutable.Map) mapClass.newInstance();
+                m = (Map) mapClass.newInstance();
             } catch (Exception e) {
                 throw new RuntimeException("Can't instantiate " + mapClass + ": " + e);
             }
             final int len = elts.length;
             for (int j = 0; j < ITERS_PER_TEST; j++) {
                 for (Object x : elts) {
-                  m.update(x, x);
+                    if (m.put(x, x) != null)
+                        throw new Error();
                 }
                 if (m.size() != len)
                     throw new Error();
                 int ng = 0;
                 for (Object x : elts) {
-                    if (m.apply(x) == x)
+                    if (m.get(x) == x)
                         ++ng;
                 }
                 matches += ng;
-                scala.collection.Iterator it = m.keySet().iterator();
-                while (it.hasNext()) {
-                  Object e = it.next();
-                  if (m.apply(e) == e)
-                    --ng;
+                for (Object e : m.keySet()) {
+                    if (m.get(e) == e)
+                        --ng;
                 }
                 if (ng != 0)
                     throw new Error();
                 for (Object x : elts) {
-                    if (m.remove(x).get() != x)
+                    if (m.remove(x) != x)
                         throw new Error();
                 }
                 if (!m.isEmpty())
@@ -153,7 +153,7 @@ public class DenseMapMicroBenchmark {
     }
 
     public static void main(String[] args) throws Throwable {
-        Class mc = util.ChainedHashMap.class;
+        Class mc = java.util.HashMap.class;
         if (args.length > 0)
             mc = Class.forName(args[0]);
         if (args.length > 1)
