@@ -276,7 +276,8 @@ object MapMicroBenchmark {
   // Read in String keys from file if possible
   def initStringKeys(keys: Array[AnyRef], n: Int) {
     try {
-      val in = new java.io.BufferedReader(new java.io.FileReader(wordFile))
+      val in = new java.io.BufferedReader(new java.io.InputStreamReader(
+          currentThread.getContextClassLoader.getResourceAsStream(wordFile)))
       var line: String = null
       var k = 0
       while(k < n && {line = in.readLine; line != null}) {
