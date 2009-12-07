@@ -11,7 +11,7 @@ do
   done
 done
 
-for key_type in int float string object
+for key_type in int double string object
 do
   for size in $SIZES
   do
