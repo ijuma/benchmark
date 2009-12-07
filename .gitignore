@@ -2,3 +2,4 @@
 /bin/
 /target/
 .scala_dependencies
+/project/boot/
