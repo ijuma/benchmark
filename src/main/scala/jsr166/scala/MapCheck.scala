@@ -146,7 +146,7 @@ object MapCheck {
       m.put(null, x)
       val v = m.get(null)
       if (v.get != x) throw new Error()
-      if (m.remove(null).get != v) throw new Error()
+      if (m.remove(null.asInstanceOf[AnyRef]).get != v) throw new Error()
       if (m.get(null).isDefined) throw new Error()
     } catch { 
       case npe: NullPointerException => println("Map does not allow null keys")
