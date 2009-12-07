@@ -360,10 +360,8 @@ object MapMicroBenchmark {
       var finished = false
       while (!finished) {
         var i = 0
-        val map = new java.util.HashMap[Any, Any]()
         while (i < half) {
           val x = ins(i)
-          map.put(x, x)
           if (m.put(x, x).isEmpty) sum += 1
           i += 1
         }
