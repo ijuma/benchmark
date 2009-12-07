@@ -1,7 +1,7 @@
 export CP=~/src/scala/build/quick/classes/library/:../target/scala_2.8.0-quick/classes:../target/scala_2.8.0-quick/resources
 export J_OPTS="-Xms1G -Xmx1G -XX:+UseCompressedOops -XX:+DoEscapeAnalysis -XX:+UseParallelGC -XX:+UseParallelOldGC"
 # Include a better OpenHashMap here
-export MAPS="scala.collection.mutable.HashMap scala.collection.mutable.OpenHashMap util.ChainedHashMap"
+export MAPS="scala.collection.mutable.HashMap scala.collection.mutable.OpenHashMap util.ChainedHashMap util.JHashMap"
 export SIZES="9 36 144 576 2304 9216 147456 589824"
 for search_type in r s
 do
