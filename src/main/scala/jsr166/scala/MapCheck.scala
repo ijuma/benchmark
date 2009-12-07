@@ -334,7 +334,7 @@ object MapCheck {
     val sz = s.size
     reallyAssert (sz == size)
     var sum = 0
-    val it = (new mutable.ArrayBuffer[AnyRef] ++ s.keySet).iterator
+    val it = (new mutable.ArrayBuffer[AnyRef] ++= s.keySet).iterator
     while (it.hasNext) {
         s -= it.next
         if (it.hasNext)
@@ -360,7 +360,7 @@ object MapCheck {
     {
       var i:Int = 0
       while (i < size) {
-        s.put(new Integer(i), java.lang.Boolean.TRUE)
+        s.put(new java.lang.Integer(i), java.lang.Boolean.TRUE)
         i = i + 1
       }
     }
