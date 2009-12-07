@@ -90,7 +90,7 @@ object MapCheck {
     }
 
     TestTimer.printStats
-    checkNullKey()
+//    checkNullKey()
     
     if (doSerializeTest) serTest(newMap, size)
   }
