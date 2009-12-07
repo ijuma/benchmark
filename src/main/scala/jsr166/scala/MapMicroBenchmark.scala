@@ -99,14 +99,16 @@ object MapMicroBenchmark {
     val is = Array.tabulate[Object](n)(java.lang.Integer.valueOf)
     jobs(2) = new Job("Integer   ", is, classOf[Integer])
     
-    // Avoid overload with ints as Scala equality between ints and longs is different from Java
+    // Avoid overlap between primitives as equality in Scala is different from Java in that case
     val ls = Array.tabulate[Object](n)(i => java.lang.Long.valueOf(n + i.toLong))
     jobs(3) = new Job("Long      ", ls, classOf[java.lang.Long])
     
-    val fs = Array.tabulate[Object](n)(i => java.lang.Float.valueOf(i.toFloat))
+    // Avoid overlap between primitives as equality in Scala is different from Java in that case
+    val fs = Array.tabulate[Object](n)(i => java.lang.Float.valueOf(n * 2 + i.toFloat))
     jobs(4) = new Job("Float     ", fs, classOf[java.lang.Float])
  
-    val ds = Array.tabulate[Object](n)(i => java.lang.Double.valueOf(i.toDouble))
+    // Avoid overlap between primitives as equality in Scala is different from Java in that case
+    val ds = Array.tabulate[Object](n)(i => java.lang.Double.valueOf(n * 3 + i.toDouble))
     jobs(5) = new Job("Double     ", ds, classOf[java.lang.Double])
     
     var b: Long = -n // include some negatives
