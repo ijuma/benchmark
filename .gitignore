@@ -4,3 +4,10 @@
 .scala_dependencies
 /project/boot/
 /project/target/
+/project/project/target/
+/.idea/
+/.idea_modules/
+/.target/
+.cache
+.classpath
+.project
