@@ -268,7 +268,7 @@ object MapCheck {
     val size = s.size
     var sum = 0
     timer.start("Traverse key or value  ", size)
-    if (s.valuesIterable.exists(_ == Missing)) sum += 1
+    if (s.values.exists(_ == Missing)) sum += 1
 
     timer.finish
     reallyAssert(sum == 0)
@@ -296,7 +296,7 @@ object MapCheck {
     var sum = 0
     timer.start("Traverse key or value  ", size)
 
-    s.valuesIterable.foreach { x =>
+    s.values.foreach { x =>
       if (x != last && (x ne null) && x.getClass == eclass) sum = sum + 1
       last = x
     }

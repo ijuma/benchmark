@@ -1,39 +1,51 @@
 package util
 
 import scala.collection._
+import generic.CanBuildFrom
+import mutable.{MapBuilder, Builder}
 
-object ChainedHashMap{
-  def apply[K, V]() = new ChainedHashMap[K, V]();
+object ChainedHashMap {
+  def empty[K, V] = apply[K, V]
+  def apply[K, V] = new ChainedHashMap[K, V]()
+
   def apply[K, V](elems : (K, V)*) = new ChainedHashMap[K, V](elems.size) ++= (elems);
 
   private[util] class Entry[Key, Value](val key : Key, 
                                            val hash : Int,
                                            var value : Value,
                                            var next: Entry[Key, Value])
+                                           
+  /* See http://bits.stephan-brumme.com/roundUpToNextPowerOfTwo.html */
+  private[util] def powerOfTwo(value: Int): Int = {
+    var c = value - 1;
+    c |= c >>>  1;
+    c |= c >>>  2;
+    c |= c >>>  4;
+    c |= c >>>  8;
+    c |= c >>> 16;
+    c + 1;
+  }
+
+  implicit def canBuildFrom[K, V]: CanBuildFrom[ChainedHashMap[_, _], (K, V), ChainedHashMap[K, V]] =
+    new CanBuildFrom[ChainedHashMap[_, _], (K, V), ChainedHashMap[K, V]] {
+      def apply(from: ChainedHashMap[_, _]) = apply
+      def apply = empty
+    }
+
 }
 
 import ChainedHashMap.Entry;
 
-class ChainedHashMap[Key, Value](expectedSize : Int) extends scala.collection.mutable.Map[Key, Value]{
+class ChainedHashMap[Key, Value](expectedSize : Int) extends scala.collection.mutable.Map[Key, Value]
+    with scala.collection.mutable.MapLike[Key, Value, ChainedHashMap[Key, Value]] {
+
   def this() = this(8)
 
   private[this] def resizeMultiplier = 2
   private[this] def loadFactor = 0.75
 
-  private def computeCapacity(expectedSize: Int): Int = {
-     if (expectedSize == 0) 1
-     else {
-      val capacity = Math.ceil(expectedSize / loadFactor).toInt
-      /* See http://bits.stephan-brumme.com/roundUpToNextPowerOfTwo.html */
-      var c = capacity - 1;
-      c |= c >>>  1;
-      c |= c >>>  2;
-      c |= c >>>  4;
-      c |= c >>>  8;
-      c |= c >>> 16;
-      c + 1;
-     }
-   }
+  private def computeCapacity(expectedSize: Int): Int =
+    ChainedHashMap.powerOfTwo(Math.ceil(expectedSize / loadFactor).toInt)
  
   //TODO Consider re-using an empty array to start with and resize on first put
   private var table : Array[Entry[Key, Value]] = new Array[Entry[Key, Value]](computeCapacity(expectedSize));
@@ -140,6 +152,19 @@ class ChainedHashMap[Key, Value](expectedSize : Int) extends scala.collection.mu
     }
     this
   }
+  
+  override def apply(key: Key): Value = {
+    requireNonNull(key)
+    val hash = hashOf(key)
+    var entry = table(findIndex(hash))
+    while(entry ne null) {
+      if (entry.hash == hash && entry.key == key) return entry.value
+
+      entry = entry.next
+    }
+
+    default(key)
+  }
 
   def get(key : Key) : Option[Value] = {
     requireNonNull(key)
@@ -171,20 +196,18 @@ class ChainedHashMap[Key, Value](expectedSize : Int) extends scala.collection.mu
     var nextEntry: Entry[Key, Value] = _
     val initialModCount = modCount;
 
-    if (size > 0) advanceInTable();
+    if (ChainedHashMap.this.size > 0) advanceInTable();
     
     private[this] def advanceInTable() {
-      var i = 0
       while (index < table.length) {
         nextEntry = table(index)
         index += 1
-        i += 1
         if (nextEntry ne null) return
       }
     }
     
     private[this] def advance() {
-      if (initialModCount != modCount) error("Concurrent modification");
+      if (initialModCount != modCount) sys.error("Concurrent modification");
       if (nextEntry eq null) throw new NoSuchElementException()
       
       nextEntry = nextEntry.next
@@ -209,7 +232,7 @@ class ChainedHashMap[Key, Value](expectedSize : Int) extends scala.collection.mu
   def foreach[U](f: (Key, Value) => U) {
     val startModCount = modCount;
     foreachEntry(entry => {
-      if (modCount != startModCount) error("Concurrent Modification")
+      if (modCount != startModCount) sys.error("Concurrent Modification")
       f(entry.key, entry.value)
     });
   }
@@ -217,26 +240,25 @@ class ChainedHashMap[Key, Value](expectedSize : Int) extends scala.collection.mu
   override def foreach[U](f : ((Key, Value)) => U) {
     val startModCount = modCount;
     foreachEntry(entry => {
-      if (modCount != startModCount) error("Concurrent Modification")
+      if (modCount != startModCount) sys.error("Concurrent Modification")
       f((entry.key, entry.value))}
     );  
   }
   
-  override def values: Iterator[Value] = new Iterator[Value] {
-    val it = new EntryIterator
-    def hasNext = it.hasNext
-    def next = it.next.value
-  }
-  
   /* Override to avoid tuple allocation in foreach */
-  override def keySet: collection.Set[Key] = new DefaultKeySet {
+  override def keySet: scala.collection.Set[Key] = new DefaultKeySet {
     override def foreach[C](f: Key => C) = foreachEntry(e => f(e.key))
+    override def toSeq = toArraySeq(this)
   }
   
   /* Override to avoid tuple allocation in foreach */
-  override def valuesIterable: collection.Iterable[Value] = new DefaultValuesIterable {
+  override def values: collection.Iterable[Value] = new DefaultValuesIterable {
     override def foreach[C](f: Value => C) = foreachEntry(e => f(e.value))
+    override def toSeq = toArraySeq(this)
   }
+  
+  /* Override to avoid tuple allocation */
+  override def keys = keySet
   
   /* Override to avoid tuple allocation */
   override def keysIterator: Iterator[Key] = new Iterator[Key] {
@@ -274,6 +296,21 @@ class ChainedHashMap[Key, Value](expectedSize : Int) extends scala.collection.mu
     foreachEntry(entry => entry.value = f(entry.key, entry.value));
     this
   }
+  
+
+  private def toArraySeq[T](traversable: Traversable[T]): mutable.ArraySeq[T] = {
+    val result = new mutable.ArraySeq[T](traversable.size)
+    var i = 0
+    for (x <- traversable) {
+      result(i) = x
+      i += 1
+    }
+    result
+  }
+  
+  override def toSeq: Seq[(Key, Value)] = toArraySeq(this)
+
+  override def empty: ChainedHashMap[Key, Value] = ChainedHashMap.empty
 
 /*
   override def retain(f : (Key, Value) => Boolean) = {

@@ -390,7 +390,7 @@ object MapMicroBenchmark {
           if (elementClass.isInstance(e)) sum += 1
         }
         checkSum += sum ^ (sum << 4);
-        for (e <- m.valuesIterable) {
+        for (e <- m.values) {
           if (elementClass.isInstance(e)) sum += 1
         }
         checkSum += sum ^ (sum << 5);
